@@ -14,7 +14,8 @@ const RESIDENCES = [
     rooms: "5 Beds / 6.5 Baths",
     elevation: "7,400 FT ELEV.",
     desc: "Perched atop the highest granite crest of Elara Hills, featuring cantilevered glass decks that float directly over the mountain treeline.",
-    features: ["Basalt Heated Deck", "Cantilevered Living", "Private Elevators"]
+    features: ["Basalt Heated Deck", "Cantilevered Living", "Private Elevators"],
+    imageUrl: "/src/assets/images/ridge_villa_1791346673370.jpg"
   },
   {
     id: "lakehouse",
@@ -24,7 +25,8 @@ const RESIDENCES = [
     rooms: "4 Beds / 4.5 Baths",
     elevation: "4,120 FT ELEV.",
     desc: "A direct lakeside structure integrated with the calm waters, featuring a private indoor-outdoor boat slip and automated timber docks.",
-    features: ["Deep Water Slip", "Hydrothermal Heat", "Shoreline Access"]
+    features: ["Deep Water Slip", "Hydrothermal Heat", "Shoreline Access"],
+    imageUrl: "/src/assets/images/lakehouse_residence_1791346684724.jpg"
   },
   {
     id: "canopy-lodge",
@@ -34,7 +36,8 @@ const RESIDENCES = [
     rooms: "3 Beds / 3.5 Baths",
     elevation: "5,800 FT ELEV.",
     desc: "A structural masterpiece built on isolated support pillars, suspended harmoniously within the crowns of centuries-old coastal redwoods.",
-    features: ["Pillar Foundation", "Observatory Dome", "Suspended Walkways"]
+    features: ["Pillar Foundation", "Observatory Dome", "Suspended Walkways"],
+    imageUrl: "/src/assets/images/canopy_retreat_1791346695720.jpg"
   }
 ];
 
@@ -66,7 +69,7 @@ export default function ResidencesSection({ onRequestBrochure }: ResidencesSecti
           {RESIDENCES.map((residence) => (
             <div 
               key={residence.id}
-              className="flex flex-col justify-between p-7 bg-neutral-950/60 hover:bg-neutral-950 border border-white/5 hover:border-white/15 rounded-2xl transition-all duration-300 text-center items-center group"
+              className="flex flex-col justify-between p-6 sm:p-7 bg-neutral-950/60 hover:bg-neutral-950 border border-white/5 hover:border-white/15 rounded-2xl transition-all duration-300 text-center items-center group"
             >
               <div className="w-full flex flex-col items-center space-y-4">
                 {/* Meta details bar */}
@@ -76,23 +79,31 @@ export default function ResidencesSection({ onRequestBrochure }: ResidencesSecti
                   <span>{residence.elevation}</span>
                 </div>
 
+                {/* Residence Architectural Photography */}
+                <div className="w-full aspect-[16/10] rounded-xl bg-neutral-900 border border-white/10 relative overflow-hidden group-hover:border-white/20 transition-all">
+                  <img 
+                    src={residence.imageUrl} 
+                    alt={residence.name}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-white/90">
+                    <span>{residence.area}</span>
+                    <span className="text-white/60">{residence.rooms}</span>
+                  </div>
+                </div>
+
                 <h3 className="font-sans font-semibold text-xl text-white tracking-tight">
                   {residence.name}
                 </h3>
-
-                {/* Specs pill */}
-                <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[11px] text-neutral-300 font-mono">
-                  <span>{residence.area}</span>
-                  <span className="text-white/20">|</span>
-                  <span>{residence.rooms}</span>
-                </div>
 
                 <p className="text-xs text-neutral-400 leading-relaxed font-light max-w-xs">
                   {residence.desc}
                 </p>
 
                 {/* Features chips */}
-                <div className="flex flex-wrap items-center justify-center gap-1.5 pt-2">
+                <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
                   {residence.features.map((feature) => (
                     <span 
                       key={feature} 

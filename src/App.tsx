@@ -15,7 +15,8 @@ import {
   RotateCcw,
   TreePine,
   TrendingUp,
-  Waves
+  Waves,
+  ArrowUp
 } from "lucide-react";
 import Header from "./components/Header";
 import HeroContent from "./components/HeroContent";
@@ -87,6 +88,25 @@ export default function App() {
     phone: "",
     notes: ""
   });
+
+  // Scroll Tracking & Smooth Scroll Progress
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const totalHeight = target.scrollHeight - target.clientHeight;
+    if (totalHeight > 0) {
+      const progress = (target.scrollTop / totalHeight) * 100;
+      setScrollProgress(progress);
+      setShowScrollTop(target.scrollTop > 350);
+    }
+  };
+
+  const scrollToTop = () => {
+    const root = document.getElementById("app-root-container");
+    root?.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   // Load background from localStorage if present
   useEffect(() => {
@@ -181,6 +201,7 @@ export default function App() {
   return (
     <div 
       id="app-root-container" 
+      onScroll={handleScroll}
       className="w-full h-screen overflow-y-auto bg-black text-white select-none transition-colors duration-500 relative scroll-smooth"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -656,6 +677,24 @@ export default function App() {
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Smooth Scroll to Top Action Button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 z-40 p-3.5 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white/80 hover:text-white border border-white/20 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] transition-all cursor-pointer group pointer-events-auto"
+            aria-label="Smooth scroll to top"
+          >
+            <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+          </motion.button>
         )}
       </AnimatePresence>
     </div>
