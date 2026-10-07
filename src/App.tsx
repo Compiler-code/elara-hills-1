@@ -10,7 +10,6 @@ import {
   ArrowRight, 
   Check, 
   Compass, 
-  Sliders, 
   ShieldCheck, 
   Eye, 
   RotateCcw,
@@ -20,7 +19,14 @@ import {
 } from "lucide-react";
 import Header from "./components/Header";
 import HeroContent from "./components/HeroContent";
-import StatsSection from "./components/StatsSection";
+import Philosophy from "./components/Philosophy";
+import ResidencesSection from "./components/ResidencesSection";
+import AmenitiesSection from "./components/AmenitiesSection";
+import DailyRhythmSection from "./components/DailyRhythmSection";
+import QuoteSection from "./components/QuoteSection";
+import ProductsSection from "./components/ProductsSection";
+import SocietyInvitationSection from "./components/SocietyInvitationSection";
+import Footer from "./components/Footer";
 
 // High-fidelity curated presets so they can preview the "Elara Hills" visual feel in different moods!
 const PRESETS = [
@@ -175,13 +181,13 @@ export default function App() {
   return (
     <div 
       id="app-root-container" 
-      className="w-full h-screen min-h-screen relative overflow-hidden bg-black text-white select-none transition-colors duration-500"
+      className="w-full h-screen overflow-y-auto bg-black text-white select-none transition-colors duration-500 relative scroll-smooth"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Background Images Layer */}
-      <div id="dynamic-bg-container" className="absolute inset-0 w-full h-full z-0 transition-all duration-700 pb-1">
+      {/* Background Images Layer with fixed placement to cover scrollable folds */}
+      <div id="dynamic-bg-container" className="fixed inset-0 w-full h-full z-0 transition-all duration-700 pb-1">
         {/* Solid Black Canvas Cover */}
         <div className="absolute inset-0 bg-black z-0" />
 
@@ -253,7 +259,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Main UI layout inside container with correct maximum grid widths */}
-      <div className="w-full h-full relative z-10 flex flex-col justify-between pointer-events-none">
+      <div className="w-full h-screen min-h-screen relative z-10 flex flex-col justify-between pointer-events-none mb-12">
         
         {/* Header - Pixel-perfect layout boundaries matching reference image */}
         <Header onNavClick={(item) => {
@@ -261,53 +267,75 @@ export default function App() {
           if (item === "Enter Society" || item === "Residences") {
             setShowJoinModal(true);
           } else {
-            // Smoothly display tabs or reset
+            // Support smooth scrolling natively to section folds!
+            let sectionId = "";
+            if (item === "Home") {
+              const root = document.getElementById("app-root-container");
+              root?.scrollTo({ top: 0, behavior: "smooth" });
+              return;
+            } else if (item === "About") {
+              sectionId = "philosophy-section";
+            } else if (item === "Residences") {
+              sectionId = "residences-section";
+            } else if (item === "Amenities") {
+              sectionId = "amenities-section";
+            } else if (item === "Gallery") {
+              sectionId = "amenities-section"; // Highlight details
+            }
+
+            if (sectionId) {
+              const element = document.getElementById(sectionId);
+              element?.scrollIntoView({ behavior: "smooth" });
+            }
           }
         }} />
 
-        {/* Main body content section: perfectly split layout on big screens */}
-        <main className="w-full flex-grow px-6 md:px-12 lg:px-24 flex items-end">
-          <div className="w-full grid grid-cols-1 lg:grid-cols-2 lg:items-end gap-12 lg:gap-8 min-h-[55%]">
-            
-            {/* Left Box: Hero text information and CTAs */}
-            <div className="flex items-end">
-              <HeroContent 
-                onJoinClick={() => setShowJoinModal(true)} 
-                onViewClick={() => {
-                  setActiveTab("Residences");
-                  setShowJoinModal(true);
-                }} 
-              />
-            </div>
-
-            {/* Right Box: Bottom Right Stats Aligned */}
-            <div className="flex items-end justify-start lg:justify-end pb-1 inline-block">
-              <StatsSection />
-            </div>
-
+        {/* Main body content section: centered layout */}
+        <main className="w-full flex-grow px-6 md:px-12 lg:px-24 flex items-center justify-center">
+          <div className="w-full max-w-4xl flex items-center justify-center">
+            <HeroContent 
+              onJoinClick={() => setShowJoinModal(true)} 
+              onViewClick={() => {
+                const element = document.getElementById("residences-section");
+                element?.scrollIntoView({ behavior: "smooth" });
+              }} 
+            />
           </div>
         </main>
       </div>
 
-      {/* Interactive Global Theme & Background Customizer Drawer Control (Subtle floating button bottom-left) */}
-      <div className="absolute bottom-6 left-6 z-40 pointer-events-auto">
-        <motion.div className="flex items-center gap-2">
-          <motion.button
-            id="btn-open-customizer"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.15)" }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setDrawerOpen(!drawerOpen)}
-            className="flex items-center gap-2 bg-black/40 border border-white/15 backdrop-blur-md px-4 py-2 rounded-full text-xs text-white/90 hover:text-white transition-all cursor-pointer shadow-lg"
-            title="Design Customizer & Test Backdrop"
-          >
-            <Sliders className="w-3.5 h-3.5" />
-            <span>Customize Backdrop</span>
-            {activePreset !== "solid-black" && (
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            )}
-          </motion.button>
-        </motion.div>
-      </div>
+      {/* Brand Experience scroll sections directly aligned following the fold */}
+      <Philosophy />
+
+      <ResidencesSection onRequestBrochure={(residenceName) => {
+        setFormData(prev => ({ ...prev, notes: `Inquiry: Plan coordinates of ${residenceName}` }));
+        setActiveTab("Residences");
+        setShowJoinModal(true);
+      }} />
+
+      <AmenitiesSection />
+
+      <DailyRhythmSection />
+
+      <QuoteSection />
+
+      <ProductsSection onInquireProduct={(productName, price) => {
+        setFormData(prev => ({ ...prev, notes: `Inquiry: Provision - ${productName} (${price})` }));
+        setActiveTab("Provisions");
+        setShowJoinModal(true);
+      }} />
+
+      <SocietyInvitationSection onJoinClick={() => {
+        setActiveTab("Membership");
+        setShowJoinModal(true);
+      }} />
+
+      <Footer onJoinClick={() => {
+        setActiveTab("Membership");
+        setShowJoinModal(true);
+      }} />
+
+      {/* Customizer workspace button removed to keep layout pristine as requested */}
 
       {/* Control Drawer Container */}
       <AnimatePresence>
@@ -516,13 +544,28 @@ export default function App() {
                 <h3 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
                   Elara Hills Society
                 </h3>
-                <p className="text-sm text-white/60 leading-relaxed mb-6">
+                <p className="text-sm text-white/60 leading-relaxed mb-4">
                   {activeTab === "Residences" ? (
                     "Enter your information below to acquire luxury brochures, private resident pricing arrays, and structural residence schedules."
+                  ) : activeTab === "Provisions" ? (
+                    "Enter your details below to submit a provision request. Numbered objects and handcrafted furnishings are allocated by date of inquiry."
                   ) : (
                     "Enter your secure credentials to request registration. Membership is strictly limited to ensure tranquil communal integrity."
                   )}
                 </p>
+
+                {formData.notes && (
+                  <div className="mb-6 px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-neutral-300 font-mono flex items-center justify-between">
+                    <span className="truncate">{formData.notes}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setFormData(prev => ({ ...prev, notes: "" }))}
+                      className="text-white/40 hover:text-white ml-2 text-[10px] uppercase font-sans cursor-pointer"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
 
                 {/* Subtitle list of perks to keep visual design elite */}
                 <div className="grid grid-cols-2 gap-3 mb-8 bg-white/3 p-4 rounded-xl border border-white/5 text-[12px]">

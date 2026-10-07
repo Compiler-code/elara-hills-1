@@ -8,21 +8,7 @@ interface HeroContentProps {
 
 export default function HeroContent({ onJoinClick, onViewClick }: HeroContentProps) {
   return (
-    <div id="hero-content-container" className="flex flex-col justify-end h-full max-w-3xl pb-16 md:pb-24 pointer-events-auto">
-      {/* Subtitle / Micro-indicator */}
-      <motion.div
-        id="hero-subtitle-pill"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="flex items-center gap-2.5 mb-5"
-      >
-        <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
-        <span className="font-sans text-xs md:text-sm font-medium tracking-widest text-white/95 uppercase">
-          Crafted for Elevated Living
-        </span>
-      </motion.div>
-
+    <div id="hero-content-container" className="flex flex-col items-center justify-center text-center h-full max-w-3xl mx-auto pb-12 md:pb-16 pointer-events-auto">
       {/* Main Hero Headline */}
       <motion.h1
         id="hero-main-title"
@@ -42,7 +28,7 @@ export default function HeroContent({ onJoinClick, onViewClick }: HeroContentPro
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-        className="font-sans text-sm sm:text-base md:text-lg text-white/80 font-normal leading-relaxed max-w-lg mb-8 md:mb-10 selection:bg-white selection:text-black"
+        className="font-sans text-sm sm:text-base md:text-lg text-white/80 font-normal leading-relaxed max-w-xl mb-8 md:mb-10 selection:bg-white selection:text-black"
       >
         Escape the rush of crowded streets and discover a private society designed for calm mornings, open views, and a more meaningful way of living.
       </motion.p>
@@ -53,7 +39,7 @@ export default function HeroContent({ onJoinClick, onViewClick }: HeroContentPro
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-        className="flex flex-wrap items-center gap-4"
+        className="flex flex-wrap items-center justify-center gap-4"
       >
         <motion.button
           id="btn-join-society"

@@ -6,8 +6,6 @@ interface HeaderProps {
 }
 
 export default function Header({ onNavClick }: HeaderProps) {
-  const navItems = ["Home", "About", "Residences", "Amenities", "Gallery"];
-
   return (
     <header className="absolute top-0 left-0 w-full z-20 px-6 md:px-12 lg:px-24 py-8 flex items-center justify-between pointer-events-auto">
       {/* Logo */}
@@ -41,25 +39,6 @@ export default function Header({ onNavClick }: HeaderProps) {
 
       {/* Navigation & Action Button CONTAINER */}
       <div className="flex items-center gap-6 lg:gap-12">
-        {/* Navigation items - aligned to center-right */}
-        <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-          {navItems.map((item, index) => (
-            <motion.button
-              key={item}
-              id={`nav-${item.toLowerCase()}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.08 }}
-              onClick={() => onNavClick?.(item)}
-              className="font-sans text-sm font-medium text-white/80 hover:text-white transition-all duration-300 relative py-1 cursor-pointer"
-              whileHover={{ scale: 1.02 }}
-            >
-              {item}
-              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-white transition-all duration-300 hover:w-full group-hover:w-full" />
-            </motion.button>
-          ))}
-        </nav>
-
         {/* Enter Society CTA Button */}
         <motion.button
           id="btn-enter-society"
